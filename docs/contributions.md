@@ -12,14 +12,14 @@ For that reason, this repository describes the system as a **three-person academ
 
 ## Individual contribution
 
-An individual contribution statement should only be added after the original division of work can be documented accurately.
+A more specific individual contribution statement should only be added if the original division of work can be reconstructed reliably.
 
-Until then, portfolio descriptions should use wording such as:
+For portfolio use, the current defensible wording is:
 
 > Contributed as part of a three-person biomedical engineering team to an ECG acquisition and HRV analysis workflow spanning signal conditioning, LabVIEW processing, and exploratory classification.
 
-Do not replace this with a sole-authorship claim unless supporting evidence exists.
+This keeps the project technically useful in a portfolio without implying sole authorship of collaborative work.
 
-## Code licensing
+## License
 
-Because the preserved VIs originate from collaborative academic work, no open-source license is currently granted in this repository. Public relicensing should be agreed by the relevant contributors and checked against any applicable institutional rules.
+The material distributed in this repository is released under the repository-level [MIT License](../LICENSE). Team attribution and third-party dependency licenses remain separate from that software-license choice.

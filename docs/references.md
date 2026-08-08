@@ -16,4 +16,8 @@ This page preserves a concise subset of the technical references used by the aca
 
 7. Shaffer F, Ginsberg JP. *An Overview of Heart Rate Variability Metrics and Norms.* Frontiers in Public Health. 2017;5:258.
 
-The reference selection and bibliographic information above follow the original academic report. Any future literature expansion should be reviewed separately and clearly distinguished from the historical project sources.
+## Recovered third-party reference implementation
+
+The broader project backup also contains a MATLAB Pan-Tompkins implementation by **Hooman Sedghamiz**, accompanied by a 2018 BSD-style license notice. That source is historical third-party reference/testing material and is not included as team-authored project code in this repository.
+
+The reference selection and bibliographic information above otherwise follow the original academic report. Any future literature expansion should be reviewed separately and clearly distinguished from the historical project sources.

@@ -14,13 +14,13 @@ From an engineering perspective, the main value of the project is the complete s
 | | |
 |---|---|
 | **Signal** | Surface ECG |
-| **Acquisition** | NI hardware + LabVIEW, reported sampling rate of 500 Hz |
+| **Acquisition** | NI hardware + LabVIEW, 500 Hz confirmed from recovered recording timestamps |
 | **R-peak processing** | Modified Pan-Tompkins-style pipeline |
 | **Time-domain HRV** | Mean RR, RR variability, RMSSD, pRR50, mean heart rate |
 | **Frequency-domain HRV** | AR spectrum, order 16, Burg-Lattice; VLF/LF/HF |
 | **Machine learning** | scikit-learn decision tree in Google Colab |
 | **Experimental sample** | 6 participants, 2 assigned conditions each |
-| **Current source status** | Two original LabVIEW VIs preserved; original Python notebook and raw ECG are not available |
+| **Current source status** | Final LabVIEW VI pair plus recovered `Global 1.vi`; original ECG and result workbook recovered privately; Python notebook still unavailable |
 
 ## Processing pipeline
 
@@ -44,18 +44,20 @@ flowchart LR
 
 ## LabVIEW implementation
 
-The original archive contains two different VIs, both preserved in [`labview/`](labview/):
+The final project archive supplied for this portfolio contains two complementary VIs, both preserved byte-for-byte in [`labview/`](labview/):
 
-- **`PARALLEL FINAL.vi`** — main acquisition/orchestration VI. It references NI-DAQmx channel creation, sample-clock timing, acquisition start/read/stop/clear operations, spreadsheet export, and the processing subVI.
-- **`Processing_data_subvi_V23.vi`** — signal-processing subVI. It references Butterworth filtering, derivative calculation, moving-average processing, peak detection, descriptive statistics, and NI autoregressive spectral analysis.
+- **`PARALLEL FINAL.vi`** - main acquisition/orchestration VI. It references NI-DAQmx channel creation, sample-clock timing, acquisition start/read/stop/clear operations, spreadsheet export, and the processing subVI.
+- **`Processing_data_subvi_V23.vi`** - signal-processing subVI. It references Butterworth filtering, derivative calculation, moving-average processing, peak detection, descriptive statistics, and NI autoregressive spectral analysis.
 
-The main VI calls `Processing_data_subvi_V23.vi`, so the files are complementary rather than duplicate versions of the same program.
+A broader project backup later recovered **`Global 1.vi`**, which is also referenced by the main VI. The recovered file is now preserved beside the final VI pair. Its compatibility with the final pair still needs to be checked by opening and running the project in LabVIEW; no functional code was modified during this recovery.
 
-Binary inspection also found a reference to **`Global 1.vi`** in the main VI. That file was not present in the original archive, so a clean LabVIEW execution cannot currently be claimed. See [`labview/README.md`](labview/README.md) and [`docs/reproducibility.md`](docs/reproducibility.md).
+The broader backup also contains several older acquisition and processing VIs. They are intentionally not added to the main repository because they are historical variants rather than the selected final implementation.
 
-## ECG and R-peak processing
+## ECG acquisition and R-peak processing
 
-According to the academic report, the acquisition chain used Ag/AgCl electrodes, differential amplification, electrical isolation, analog filtering and NI data acquisition at **500 Hz**.
+The acquisition chain described in the project material used Ag/AgCl electrodes, differential amplification, electrical isolation, analog filtering and NI data acquisition.
+
+The recovered condition recordings provide independent evidence for the **500 Hz sampling rate**: their timestamps advance in 0.002 s steps. The main stress/relaxation recordings inspected span roughly **306 to 381 seconds**, consistent with an approximately five-minute experimental protocol plus acquisition overhead.
 
 The ECG-processing sequence followed a Pan-Tompkins-style approach:
 
@@ -66,7 +68,9 @@ The ECG-processing sequence followed a Pan-Tompkins-style approach:
 5. threshold-based detection;
 6. R-peak localization with LabVIEW `Peak Detector`.
 
-The original implementation used a normalized signal with a **fixed threshold of 80**. Because the full adaptive-threshold logic of the classical Pan-Tompkins algorithm is not documented, the method is described here as **Pan-Tompkins-style** rather than a canonical implementation.
+The original implementation used a normalized signal with a **fixed threshold of 80**. Because the full adaptive-threshold logic of the classical Pan-Tompkins algorithm is not documented in the preserved LabVIEW implementation, the method is described here as **Pan-Tompkins-style** rather than a canonical implementation.
+
+A separate MATLAB implementation of Pan-Tompkins was found in the broader backup. It is third-party code by Hooman Sedghamiz under a BSD-style license and is treated as historical/reference material, not as the team's LabVIEW implementation or as original project code.
 
 ## HRV analysis
 
@@ -76,24 +80,26 @@ The reported time-domain features include:
 - standard deviation of RR intervals;
 - minimum and maximum RR;
 - mean heart rate;
-- RMSSD — labelled `RMSS` in the original results table;
+- RMSSD - labelled `RMSS` in the original results table;
 - pRR50.
 
-The report also describes artifact filtering from RR to NN intervals, but the exact correction procedure is not preserved in the available files.
+The recovered final results workbook clarifies one unit detail: an intermediate table stores mean heart rate in Hz, while the report-facing table converts it to bpm by multiplying by 60. The bpm values match `60000 / Mean RR [ms]`.
+
+The report also describes artifact filtering from RR to NN intervals, but the exact correction procedure is still not preserved.
 
 For frequency-domain HRV, the report specifies an autoregressive model with:
 
 - **order 16**;
 - **Burg-Lattice** coefficient estimation;
-- VLF: **0.003–0.04 Hz**;
-- LF: **0.04–0.15 Hz**;
-- HF: **0.15–0.40 Hz**.
+- VLF: **0.003-0.04 Hz**;
+- LF: **0.04-0.15 Hz**;
+- HF: **0.15-0.40 Hz**.
 
 The processing VI contains a reference to NI `TSA AR Spectrum`. The exact preprocessing of the irregular RR series before spectral estimation is not preserved.
 
 ## Experimental protocol
 
-The report describes six healthy student participants, aged 20–24 years. Each participant completed two assigned experimental conditions:
+The report describes six healthy student participants, aged 20-24 years. Each participant completed two assigned experimental conditions:
 
 - **Stress:** Stroop and N-Back cognitive tasks.
 - **Relaxation:** meditation sounds and slow breathing.
@@ -113,7 +119,9 @@ Within this small sample, the time-domain results reported for the relaxation co
 
 These are descriptive observations from the available sample. No statistical significance or clinical performance is claimed.
 
-Frequency-domain differences were less consistent. The original discussion mentions short recordings, breathing, movement artifacts and inter-participant variability as possible contributors.
+A publication-safe aggregate summary derived from the final anonymized results table is available in [`results/aggregate_hrv_summary.csv`](results/aggregate_hrv_summary.csv).
+
+Frequency-domain differences were less consistent. The original discussion mentions recording length, breathing, movement artifacts and inter-participant variability as possible contributors.
 
 ## Exploratory decision tree
 
@@ -123,21 +131,22 @@ The time-domain HRV table was used in Google Colab with **scikit-learn**. The tr
 - minimum RR;
 - mean RR.
 
-The original notebook is not included in the preserved archive, and the report does not document an independent test set or cross-validation. For that reason, the tree is presented as an exploratory analysis of the small dataset, not as a validated stress classifier.
+A deep scan of the recovered backup found no `.py` or `.ipynb` source for this analysis. The report does not document an independent test set or cross-validation. The tree is therefore presented as an exploratory analysis of the small dataset, not as a validated stress classifier.
 
 ## Repository structure
 
 ```text
-labview/       Original LabVIEW VIs and implementation notes
+labview/       Final LabVIEW VIs plus recovered Global 1.vi
 python/        Status of the original Python/Colab analysis
 data/          Data-publication policy; no raw participant ECG
-results/       Verified result summary
+results/       Publication-safe aggregate result summary
 media/         Publication-safe visual assets
 
 docs/
   acquisition_setup.md
   methodology.md
   technical-audit.md
+  recovered-archive-audit.md
   reproducibility.md
   limitations.md
   privacy-and-ethics.md
@@ -147,36 +156,39 @@ docs/
 
 ## Reproducibility status
 
-The preserved archive is **not yet end-to-end reproducible**. The main missing pieces are:
+The broader project backup substantially improves the evidence base, but the original workflow is **not yet end-to-end reproducible in a clean environment**.
 
-- `Global 1.vi`, referenced by the main LabVIEW VI;
-- original raw ECG recordings;
-- exported RR/NN series and result spreadsheet;
-- original Python/Google Colab notebook;
-- exact LabVIEW version, NI hardware model and runtime configuration;
-- exact RR-to-NN artifact-correction procedure.
+Recovered and audited:
 
-The two available LabVIEW VIs are preserved byte-for-byte from the original project archive. If the missing files are recovered, they can be audited and added without changing the current baseline.
+- `Global 1.vi`;
+- original human ECG recordings;
+- the final results workbook used to prepare the report tables;
+- a legacy LabVIEW project file and several historical VI variants.
 
-## Data and privacy
+Still missing or unresolved:
 
-Raw participant ECG, individual RR/NN files, acquisition metadata, consent documents and re-identification information are not distributed in this repository.
+- original Python/Google Colab notebook or script;
+- exported R-peak and RR/NN series;
+- exact RR-to-NN artifact-correction procedure;
+- exact runtime controls for the selected final VI pair;
+- exact NI hardware model and channel configuration;
+- clean-environment execution of the recovered LabVIEW dependency set.
 
-A reproducible public demo should use synthetic ECG or an appropriately licensed public ECG dataset. See [`data/README.md`](data/README.md).
+The recovered raw ECG and original workbook are **not distributed** because the source archive contains participant names and, in some files, direct numeric identifiers. See [`data/README.md`](data/README.md) and [`docs/recovered-archive-audit.md`](docs/recovered-archive-audit.md).
 
 ## Team
 
 The academic report credits:
 
 - Lorenzo Mazzante
-- Martín Scorza
+- Martin Scorza
 - Pietro Marcon
 
 The original material does not provide a reliable task-by-task contribution breakdown, so the project is presented as collaborative work rather than attributing the complete system to one person.
 
 ## License
 
-Released under the [MIT License](LICENSE). National Instruments software components and any future third-party datasets remain subject to their own licenses.
+Released under the [MIT License](LICENSE). National Instruments software components and third-party reference code/data retain their own licenses.
 
 ## Disclaimer
 
@@ -189,6 +201,7 @@ This project is not a medical device and was not clinically validated. It must n
 - [Acquisition setup](docs/acquisition_setup.md)
 - [Signal-processing and HRV methodology](docs/methodology.md)
 - [Technical audit](docs/technical-audit.md)
+- [Recovered archive audit](docs/recovered-archive-audit.md)
 - [Reproducibility](docs/reproducibility.md)
 - [Limitations](docs/limitations.md)
 - [Privacy and ethics](docs/privacy-and-ethics.md)

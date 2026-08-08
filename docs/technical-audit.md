@@ -1,27 +1,24 @@
 # Technical audit summary
 
-This audit records the evidence boundary used for the portfolio repository. It distinguishes what is preserved in executable LabVIEW artifacts, what is described only in the academic report, and what remains unavailable.
+This audit separates what is preserved in the final LabVIEW files, what was recovered from the broader project backup, what is documented only in the academic material, and what still cannot be reproduced.
 
-## Preserved in LabVIEW artifacts
+## Selected final LabVIEW artifacts
 
 ### `PARALLEL FINAL.vi`
 
-References support:
+Internal references support:
 
 - NI-DAQmx analog-voltage channel creation;
 - sample-clock configuration;
 - acquisition start/read/stop/clear sequence;
 - single-channel multi-sample acquisition;
 - spreadsheet-style export;
-- invocation of `Processing_data_subvi_V23.vi`.
-
-The main VI contains two internal references to `Processing_data_subvi_V23.vi`. The processing subVI does not reference the main VI. This supports retaining both files as distinct artifacts in the repository.
-
-Binary inspection also identified a reference to `Global 1.vi`. That file is absent from the original ZIP and is therefore an unresolved dependency. Its role and whether it is required by the final execution path must be confirmed in LabVIEW.
+- invocation of `Processing_data_subvi_V23.vi`;
+- use of `Global 1.vi`.
 
 ### `Processing_data_subvi_V23.vi`
 
-References support:
+Internal references support:
 
 - Butterworth filtering;
 - derivative calculation;
@@ -31,48 +28,90 @@ References support:
 - autoregressive spectrum estimation;
 - delimited-spreadsheet reading.
 
-No additional custom external VI was identified from the printable dependency strings of this processing subVI.
+The presence of a dependency confirms that the VI references the function; it does not by itself establish every runtime parameter or prove every possible code path was executed during the reported experiments.
 
-The presence of these references demonstrates that the functions are dependencies of the VIs. It does not, by itself, establish every runtime parameter or prove every code path was executed during the reported experiments.
+## Recovered custom dependency
+
+A broader project backup contains `Global 1.vi`, matching the custom dependency name referenced by the main final VI. It is now preserved in `labview/` without modification.
+
+The recovered file was stored in a historical backup folder, so its compatibility with the selected final VI pair still needs to be tested in LabVIEW. The repository preserves the original file rather than attempting to recreate a replacement.
 
 ## Binary integrity
-
-The VIs committed to GitHub were compared with the original project ZIP and are byte-for-byte identical.
 
 Git blob identifiers:
 
 - `PARALLEL FINAL.vi`: `4adf9b39acf3373edde3e401173f4ff525684492`
 - `Processing_data_subvi_V23.vi`: `3cf479c0688823048d6bf254d51374685f198877`
+- `Global 1.vi`: `4ed050e66bd5fd469ed971a8b13f8174dfaa7975`
 
-This confirms preservation integrity, not runtime reproducibility.
+These hashes document preservation integrity, not successful runtime execution.
 
-## Described in the report but not fully recoverable from the available source
+## Broader backup inventory
 
-- 500 Hz acquisition;
-- NL 844 AC preamplifier and reported analog gains;
-- 150 Hz analog low-pass cutoff;
-- approximately 5-15 Hz QRS-focused digital filtering;
-- fixed normalized threshold of 80;
-- RR-to-NN artifact filtering;
-- AR order 16 and Burg-Lattice configuration;
-- Google Colab / scikit-learn decision-tree training;
-- six participants and twelve condition-level observations;
-- reported time- and frequency-domain HRV tables.
+The recovered backup contains 13 LabVIEW VIs in total, including acquisition-only versions, processing variants, `con while true` variants and separate Pan-Tompkins experiments. It also contains:
 
-These elements are documented as historical project methods/results but are not all reproducible from the two binary VIs alone.
+- one legacy `.lvproj`;
+- original ECG recordings;
+- result spreadsheets and CSV exports;
+- three project PDFs;
+- two MATLAB scripts plus a MATLAB sample file;
+- participant metadata files.
 
-## Not available in the archive
+The historical variants are intentionally not copied into the recruiter-facing repository because the initially supplied portfolio archive already identified the selected final main VI and processing subVI.
 
-- `Global 1.vi`, referenced by the main VI;
-- raw ECG data;
-- original result spreadsheet;
-- R-peak exports;
-- RR/NN exports;
-- Python or notebook source;
+## Sampling and recording verification
+
+The recovered `Oficial tests` condition recordings contain regularly spaced timestamps with:
+
+`delta t = 0.002 s`
+
+which independently verifies:
+
+`sampling frequency = 500 Hz`
+
+The main stress and relaxation recordings inspected have durations of roughly 306-381 s.
+
+## Results verification
+
+The recovered final workbook reproduces the 12 anonymized rows shown in the report as `Patient 1` through `Patient 6`.
+
+It also contains an internal named version of the same final table, which is why the workbook is not redistributed publicly.
+
+The workbook clarifies that the intermediate `HR Mean` values are stored in Hz. The report-facing table applies a factor of 60 and reports bpm. Those bpm values agree with `60000 / Mean RR [ms]`.
+
+A publication-safe aggregate derived from the final anonymized table is committed under `results/`.
+
+## Pan-Tompkins reference material
+
+The broader backup contains a MATLAB implementation named `pan_tompkin.m` by Hooman Sedghamiz. The file identifies itself as a complete Pan-Tompkins implementation and carries a BSD-style license.
+
+This code is treated as third-party reference/testing material. It is **not** evidence that the project's LabVIEW detector implemented every adaptive threshold, search-back or T-wave discrimination step from that MATLAB version, and it is not redistributed as team-authored source code.
+
+A small local MATLAB script also contains an absolute development path, reinforcing the decision not to publish the historical MATLAB folder as project source.
+
+## Legacy LabVIEW project file
+
+The recovered `ACAUISITION.lvproj` references `AQUIISITON.vi` and `Global 1.vi`, not the selected final VI pair. It reports `LVVersion="23008000"`.
+
+This is useful historical evidence but is not presented as the final executable project configuration.
+
+## Still unavailable or unresolved
+
+- original `.py` or `.ipynb` source for the decision tree;
 - exact Python environment;
-- complete DAQ runtime configuration;
-- complete LabVIEW parameter documentation;
-- independent ML validation results.
+- exported R-peak indices/timestamps;
+- exported RR and corrected NN series;
+- exact RR-to-NN correction method;
+- exact selected-final-VI runtime controls;
+- exact NI hardware model and channel mapping;
+- complete preprocessing sequence before AR spectrum estimation;
+- independent machine-learning validation results.
+
+## Privacy findings
+
+The recovered archive contains human ECG files whose filenames include participant names. Separate metadata text files also contain names and direct numeric identifiers.
+
+Those files must remain outside the public repository. The full recovered ZIP should not be published.
 
 ## Claim policy
 
@@ -82,5 +121,5 @@ The repository must not state or imply:
 - medical-device status;
 - clinically validated monitoring;
 - generalizable model accuracy;
-- sole authorship of the collaborative project;
-- reproducibility of outputs that cannot currently be regenerated from the preserved files.
+- sole authorship of collaborative work;
+- end-to-end reproducibility until the preserved dependency set has actually been opened and tested in LabVIEW.

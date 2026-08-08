@@ -2,88 +2,109 @@
 
 ## Current status
 
-The original project **cannot currently be reproduced end-to-end** from the preserved archive alone.
+The recovered project backup improves the evidence base substantially, but the original workflow is **not yet reproducible end to end in a clean environment**.
 
-This is not hidden: preserving the distinction between available evidence and missing artifacts is part of the repository design.
+The key change from the initial audit is that several artifacts previously thought to be missing have now been recovered and inspected privately.
 
-## Preserved source artifacts
+## Preserved in the repository
 
 - `labview/PARALLEL FINAL.vi`
 - `labview/Processing_data_subvi_V23.vi`
-- methodology and results documented in the original academic report
+- `labview/Global 1.vi`
+- methodology and limitations documentation
+- publication-safe aggregate HRV summary
 
-The two LabVIEW files committed to the repository are byte-for-byte identical to the VIs in the original ZIP.
+The final main VI and processing subVI are byte-for-byte identical to the files originally supplied for this portfolio reconstruction. `Global 1.vi` is preserved byte-for-byte from the broader recovered project backup.
+
+## Recovered privately but not redistributed
+
+The broader backup contains:
+
+- original human ECG recordings;
+- multiple stress and relaxation acquisition files;
+- the result workbook used to prepare the final report tables;
+- older LabVIEW acquisition and processing variants;
+- a legacy LabVIEW `.lvproj`;
+- presentation/report material;
+- a third-party MATLAB Pan-Tompkins implementation with its own BSD-style license.
+
+The human recordings and original workbook are not committed because the archive contains participant names and some files contain direct numeric identifiers.
+
+## Acquisition evidence recovered
+
+The main stress/relaxation CSV recordings use timestamps separated by **0.002 s**, independently confirming a **500 Hz sampling rate**.
+
+The principal condition recordings inspected span approximately **306-381 s**. This is consistent with an approximately five-minute protocol with variation or acquisition overhead.
+
+Some acquisition files contain two columns (`signal`, `time`) while later variants contain three columns, with an additional zero-valued channel/field. The exact export schema should be documented before attempting automated reuse.
 
 ## LabVIEW dependency relationship
 
-Binary inspection supports the following relationship:
+Binary inspection supports:
 
 ```text
 PARALLEL FINAL.vi
     -> Processing_data_subvi_V23.vi
+    -> Global 1.vi
 ```
 
-The main VI contains two references to the processing subVI. The processing subVI does not contain a reciprocal reference to the main VI. Both files are therefore retained as distinct project artifacts.
+The main VI contains references to both custom dependencies. The recovered `Global 1.vi` was found in a historical folder of the broader backup and is now preserved with the final pair.
 
-The main VI also references **`Global 1.vi`**, which is not present in the original ZIP. Its purpose and runtime necessity remain unresolved. A clean LabVIEW load may therefore require manual dependency resolution before the original workflow can execute.
+A recovered legacy project file identifies `AQUIISITON.vi` and `Global 1.vi` and reports `LVVersion="23008000"`. This helps date the project environment, but the `.lvproj` does not reference the selected final VI pair, so it is not treated as a runnable final project definition.
 
-## Missing original artifacts
+## Results workbook recovered
 
-- `Global 1.vi`, referenced by the main VI;
-- raw ECG recordings;
-- exported filtered ECG;
-- R-peak indices/timestamps;
-- RR series;
+`Resultats_2_0 - copia.xlsx` contains the 12 final condition-level rows used in the report. One section retains participant names, while a second section reproduces the same values using `Patient 1` through `Patient 6`.
+
+The workbook also resolves a unit ambiguity:
+
+- the intermediate `HR Mean` field is stored in Hz;
+- the report-facing sheet multiplies it by 60 to obtain bpm;
+- the bpm values agree with `60000 / Mean RR [ms]`.
+
+The workbook itself is not redistributed because it retains named participant-level data. A safe aggregate derived from the anonymized table is provided in `results/aggregate_hrv_summary.csv`.
+
+## Still missing or unresolved
+
+- original Google Colab/Jupyter notebook;
+- original Python script;
+- exact Python environment and package versions;
+- exported R-peak indices/timestamps;
+- exported RR series;
 - corrected NN series;
-- original Excel/CSV result table;
-- Google Colab/Jupyter notebook;
-- Python script;
-- exact Python environment;
-- LabVIEW project file, if one existed;
-- exact DAQ configuration;
-- exact filter/MWI/normalization parameters;
-- documented RR-to-NN artifact-correction algorithm.
+- exact RR-to-NN artifact-correction algorithm;
+- exact runtime configuration for the selected final VI pair;
+- exact NI acquisition-card model and device/channel mapping;
+- clean-environment execution of the recovered LabVIEW dependency set;
+- complete spectral preprocessing details before AR estimation.
 
-## Dependency status
+A deep file scan of the recovered backup found **no `.py` or `.ipynb` file** containing the scikit-learn analysis.
 
-### LabVIEW
+## Python status
 
-Verified references in the VIs indicate a need for:
+The academic report explicitly documents Google Colab, Python and scikit-learn for the decision tree. No source file for that analysis was recovered.
 
-- LabVIEW compatible with the preserved VIs;
-- NI-DAQmx;
-- NI signal-processing components;
-- NI Time Series Analysis / Advanced Signal Processing functionality.
+`requirements.txt` therefore remains intentionally minimal rather than guessing the original environment.
 
-Exact version numbers are not preserved.
+## What can now be independently checked
 
-In addition, `PARALLEL FINAL.vi` references the unavailable `Global 1.vi`. The repository does not attempt to recreate this missing dependency without evidence of its original contents.
+From the recovered files and report tables:
 
-### Python
-
-The report explicitly documents:
-
-- Python through Google Colab;
-- scikit-learn for the decision tree.
-
-No other Python package is listed here as an original dependency unless it can be verified from recovered source code.
-
-## What can be independently checked from the report
-
-- `HR mean = 60000 / Mean RR` is internally consistent with the reported table values;
+- 500 Hz sampling is confirmed from timestamp spacing;
+- recording durations can be measured directly from the source files;
+- `HR mean [bpm] = 60000 / Mean RR [ms]` is confirmed by the report-facing workbook;
 - LF/HF is consistent with reported LF and HF values;
 - normalized LF and HF values are consistent with normalization over LF + HF;
-- the displayed decision-tree structure is consistent with the published time-domain table, but this does not replace the missing original notebook.
+- the displayed decision-tree structure remains consistent with the final time-domain table, although the original notebook is absent.
 
-## Path to improved reproducibility
+## Next reproducibility steps
 
-1. Open `PARALLEL FINAL.vi` in a compatible LabVIEW environment and determine the purpose of the unresolved `Global 1.vi` reference.
-2. Recover `Global 1.vi` if it belongs to the original project and can be shared.
-3. Recover the original Python/Colab analysis if available.
-4. Recover the original exported result spreadsheet.
-5. Document every LabVIEW runtime control and processing parameter.
-6. Record the NI hardware model and DAQ channel configuration.
-7. Document the RR-to-NN correction procedure.
-8. Add a synthetic or appropriately licensed public ECG example.
-9. Validate R-peak detection against reference annotations on a publication-safe dataset.
-10. If the ML analysis is extended, evaluate by participant rather than randomly splitting paired records from the same participant.
+1. Open the three preserved custom VIs together in a compatible LabVIEW environment.
+2. Record any remaining missing dependencies and broken links.
+3. Document all front-panel controls and acquisition parameters for the selected final pair.
+4. Identify the exact NI hardware model and channel configuration if still available.
+5. Document the RR-to-NN correction procedure from the block diagram, if implemented there.
+6. Recover the original Python/Colab analysis if it exists elsewhere.
+7. Add a synthetic or suitably licensed public ECG demo rather than publishing human recordings.
+8. Validate R-peak detection against reference annotations on publication-safe data.
+9. If the ML analysis is extended, evaluate by participant rather than randomly splitting paired records from the same participant.

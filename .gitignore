@@ -1,0 +1,34 @@
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# LabVIEW generated / local project state
+*.aliases
+*.lvlps
+*.lvproj~
+*.vi~
+
+# Sensitive or local physiological data
+# These paths must remain untracked unless publication rights are explicitly verified.
+data/raw/
+data/private/
+data/participant_data/
+data/consent/
+
+# Local exports and temporary analysis outputs
+results/local/
+*.log

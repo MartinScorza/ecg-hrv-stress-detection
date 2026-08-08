@@ -61,6 +61,7 @@ The available project archive contains two LabVIEW VIs and the academic report f
 | Peak detection | Preserved in LabVIEW | `Peak Detector.vi` reference |
 | Descriptive statistics | Preserved in LabVIEW | Mean and standard-deviation references |
 | AR spectral analysis | Preserved in LabVIEW | `TSA AR Spectrum.vi` reference |
+| Additional LabVIEW dependency | Missing | `Global 1.vi` is referenced by the main VI but absent from the original archive |
 | Decision-tree analysis | Documented only | Python/scikit-learn use described in the report; source notebook is missing |
 | Raw ECG recordings | Not included | Original participant recordings are not redistributed |
 | RR/NN series | Not included | Original exported series are not preserved in the archive |
@@ -181,7 +182,7 @@ See [`python/README.md`](python/README.md) and [`docs/reproducibility.md`](docs/
 
 The original VIs are preserved without functional edits in [`labview/`](labview/). A compatible LabVIEW installation, NI-DAQmx, and the relevant NI signal/time-series analysis components are required.
 
-The exact LabVIEW version and hardware configuration still need to be recovered from the original environment, so a fully reproducible hardware execution procedure cannot yet be provided.
+The exact LabVIEW version and hardware configuration still need to be recovered from the original environment. Binary inspection also found an unresolved `Global 1.vi` reference in the main VI; that file is absent from the original archive. A fully reproducible hardware execution procedure therefore cannot yet be provided.
 
 ### Python
 
@@ -224,6 +225,7 @@ Key limitations include:
 - missing original Python/Colab source;
 - no independent ML validation;
 - unresolved exact LabVIEW version and NI hardware configuration;
+- unresolved `Global 1.vi` dependency referenced by the main acquisition VI;
 - raw data unavailable in the preserved archive.
 
 A detailed discussion is available in [`docs/limitations.md`](docs/limitations.md).

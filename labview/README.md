@@ -1,31 +1,25 @@
 # LabVIEW implementation
 
-This directory preserves the two LabVIEW VIs available in the original project archive **without functional modification or renaming**.
+This directory preserves the selected final LabVIEW implementation without functional modification.
 
-## File relationship
+## Files and relationship
 
-The two files are not duplicates and serve different roles.
+The final project archive supplied for this portfolio contains two complementary VIs:
 
-- `PARALLEL FINAL.vi` is the main acquisition/orchestration VI. Its internal dependency table contains two references to `Processing_data_subvi_V23.vi`.
-- `Processing_data_subvi_V23.vi` is a separate processing subVI. It does not contain a reciprocal reference to `PARALLEL FINAL.vi`.
+- `PARALLEL FINAL.vi` - main acquisition/orchestration VI;
+- `Processing_data_subvi_V23.vi` - signal-processing subVI.
 
-This supports preserving **both files** together. Without opening the block diagram in a compatible LabVIEW environment, the binary inspection cannot prove that the processing subVI executes on every possible runtime path, but it is clearly referenced by the main VI and belongs to the preserved project dependency set.
+Binary inspection shows that `PARALLEL FINAL.vi` references `Processing_data_subvi_V23.vi`, while the processing subVI does not reference the main VI. They are therefore different parts of the same workflow, not duplicate versions.
 
-## Files
+A broader project backup later recovered a third custom dependency:
 
-### `PARALLEL FINAL.vi`
+- `Global 1.vi` - referenced by the main VI and now preserved here from the recovered backup.
 
-The VI contains references to NI-DAQmx functionality for:
+The recovered `Global 1.vi` was found in a historical folder of the backup. Its filename and the dependency references are consistent with the missing custom VI previously identified in `PARALLEL FINAL.vi`, but the complete set has not yet been opened and executed in LabVIEW. It is preserved as original project material rather than reconstructed.
 
-- analog-input voltage channel creation;
-- sample-clock timing;
-- task start;
-- multi-sample, single-channel analog read;
-- task stop and cleanup;
-- spreadsheet-style export;
-- execution of `Processing_data_subvi_V23.vi`.
+## `PARALLEL FINAL.vi`
 
-Verified referenced NI functions include:
+Verified internal references include:
 
 - `DAQmx Create Channel (AI-Voltage-Basic).vi`
 - `DAQmx Timing (Sample Clock).vi`
@@ -34,18 +28,14 @@ Verified referenced NI functions include:
 - `DAQmx Stop Task.vi`
 - `DAQmx Clear Task.vi`
 - `Write To Spreadsheet File (DBL).vi`
+- `Processing_data_subvi_V23.vi`
+- `Global 1.vi`
 
-The original file name is retained because changing a LabVIEW VI name may affect subVI references.
+This supports a role covering analog-input acquisition, timing, task lifecycle, data export and invocation of the processing subVI.
 
-#### Unresolved custom dependency
+## `Processing_data_subvi_V23.vi`
 
-Binary inspection also found a reference to **`Global 1.vi`** in `PARALLEL FINAL.vi`. This file is not present in the original project ZIP.
-
-`Global 1.vi` is therefore treated as an **unresolved dependency**. Its purpose, whether it is required on the final execution path, and whether it contains project-specific state must be confirmed by opening the main VI in a compatible LabVIEW environment. The repository does not fabricate or replace this missing file.
-
-### `Processing_data_subvi_V23.vi`
-
-The preserved processing VI references functionality including:
+Verified internal references include:
 
 - `Butterworth Filter.vi`
 - `Derivative x(t).vi`
@@ -58,44 +48,48 @@ The preserved processing VI references functionality including:
 
 The VI also references NI analysis libraries including `NI_AdvSigProcTSA.lvlib`.
 
-No additional custom external VI was identified from the printable dependency strings of this processing file.
+## Integrity record
 
-## Integrity verification
+The selected final pair is byte-for-byte identical to the files originally supplied for the portfolio audit.
 
-The two files committed to this repository were compared with the VIs in the original project ZIP. Their contents are byte-for-byte identical.
-
-Git blob identifiers for the preserved binaries are:
+Git blob identifiers:
 
 - `PARALLEL FINAL.vi`: `4adf9b39acf3373edde3e401173f4ff525684492`
 - `Processing_data_subvi_V23.vi`: `3cf479c0688823048d6bf254d51374685f198877`
 
-These identifiers are included as an integrity record, not as evidence that the VIs have been successfully executed in a clean LabVIEW installation.
+The recovered global VI is also preserved byte-for-byte from the broader backup:
+
+- `Global 1.vi`: `4ed050e66bd5fd469ed971a8b13f8174dfaa7975`
+
+These identifiers record file integrity; they do not prove successful execution in a clean LabVIEW environment.
+
+## Historical variants intentionally excluded
+
+The broader backup contains several earlier or alternate VIs, including acquisition-only versions, `con while true` variants, and separate Pan-Tompkins processing variants. They are useful for audit history but are not included in the recruiter-facing repository because the originally supplied final archive already identified the selected main VI and processing subVI.
+
+A recovered `.lvproj` also belongs to an earlier acquisition configuration: it references `AQUIISITON.vi` and `Global 1.vi`, not the selected final VI pair. The project file reports `LVVersion="23008000"`, which is evidence about that legacy project environment, not proof of the exact LabVIEW version used to save the final pair.
 
 ## Required environment
 
-The exact original LabVIEW version is not preserved. Reproduction is expected to require, at minimum:
+A clean execution is expected to require at least:
 
 - a compatible LabVIEW installation;
 - NI-DAQmx;
 - NI signal-processing functionality used by the VIs;
-- the NI Time Series Analysis / Advanced Signal Processing components referenced by the processing VI;
-- compatible NI acquisition hardware for live acquisition;
-- recovery or resolution of the missing `Global 1.vi` reference if LabVIEW requires it when loading or executing the main VI.
+- NI Time Series Analysis / Advanced Signal Processing components;
+- compatible NI acquisition hardware.
 
-## Reproducibility gaps
+Still to verify in LabVIEW:
 
-The binary VIs preserve implementation artifacts but do not, by themselves, document all runtime configuration. The following still require recovery or visual inspection in the original LabVIEW environment:
-
-- purpose and runtime requirement of `Global 1.vi`;
+- whether the recovered `Global 1.vi` resolves all custom dependencies of the final main VI;
 - exact NI hardware model and device/channel mapping;
 - input voltage range and terminal configuration;
-- acquisition duration and buffer settings;
+- buffer and acquisition controls;
 - exact Butterworth filter parameters;
-- normalization formula;
+- normalization formula and fixed-threshold scaling;
 - moving-window length;
-- threshold scaling;
 - RR-to-NN artifact-correction logic;
-- exact AR-spectrum preprocessing and settings;
+- AR-spectrum preprocessing and settings;
 - local export paths.
 
-No changes should be made to the functional VIs until these settings are documented and a known-working baseline is preserved.
+No functional changes should be made to these VIs until a known-working baseline has been opened and documented in LabVIEW.

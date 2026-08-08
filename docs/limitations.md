@@ -16,6 +16,12 @@ No independent clinical, psychometric, or biochemical reference standard is docu
 
 Several processing parameters are not preserved, including the exact filter design, normalization, moving-window length, and RR-to-NN correction method. These omissions limit reproducibility and may affect HRV estimates.
 
+## LabVIEW dependency gap
+
+`PARALLEL FINAL.vi` references both the preserved processing subVI and an additional file named `Global 1.vi`. The latter is absent from the original archive.
+
+Its purpose and whether it is required to load or execute the final acquisition path are not known from binary inspection alone. Until it is recovered or inspected in LabVIEW, the preserved VIs should not be described as independently runnable in a clean environment.
+
 ## Frequency-domain HRV
 
 The report itself notes that the frequency-domain differences were less systematic. Short recordings, breathing effects, movement artifacts, and inter-participant variability can strongly affect spectral HRV interpretation.

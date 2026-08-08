@@ -1,31 +1,27 @@
-# Licensing status
+# Licensing
 
-## Project code
+## Repository license
 
-The preserved LabVIEW VIs originate from a three-person academic team project. The original report does not document an individual ownership split, and the available archive does not contain an explicit software license.
+The repository is released under the [MIT License](../LICENSE).
 
-For that reason, this repository currently grants **no open-source license** for the preserved code.
-
-Before making the code publicly reusable, confirm:
-
-1. contributor agreement on publication and licensing;
-2. any applicable Université de Technologie de Compiègne (UTC) rules for academic project code;
-3. that no proprietary laboratory code or third-party source is embedded in the files.
-
-## Unresolved project dependency
-
-`PARALLEL FINAL.vi` contains a reference to `Global 1.vi`, but that file is not present in the original archive. Its provenance and contents therefore cannot currently be audited.
-
-Until that dependency is recovered or shown to be an obsolete/non-required reference, it should be treated as another reason not to claim that the preserved LabVIEW workflow is a complete independently redistributable software package.
+The project was originally developed by a three-person academic team. The MIT license applies to the material distributed in this repository; it does not change the license terms of external software, hardware drivers, datasets, publications, or figures referenced by the project.
 
 ## National Instruments dependencies
 
-The LabVIEW VIs reference National Instruments software components. Those dependencies are not part of this repository and remain subject to their own licenses.
+The LabVIEW VIs reference National Instruments software components, including NI-DAQmx and signal/time-series analysis functions. These dependencies are not redistributed here and remain subject to National Instruments licensing terms.
+
+## Missing LabVIEW dependency
+
+`PARALLEL FINAL.vi` references `Global 1.vi`, but that file was not included in the original project archive available for this portfolio reconstruction.
+
+Its contents and provenance have therefore not been audited. The missing dependency is documented as a reproducibility limitation rather than reconstructed without evidence.
 
 ## Academic report and figures
 
-The original report is intentionally not redistributed by default because it includes third-party figures, institutional branding, and participant-level results. Citation in an academic report does not automatically grant redistribution rights for every embedded image.
+The original academic report is not included in the repository. It contains institutional material, participant-level results, and figures from external sources. References from the report are listed separately where useful, but third-party figures should not be redistributed without checking their original licenses.
 
-## Data
+## Human physiological data
 
-No license is granted for original human physiological recordings because they are not distributed here. Any future synthetic or public dataset added to `data/` must include explicit provenance and licensing information.
+Original participant ECG recordings are not distributed in this repository. The MIT License does not grant rights to any underlying human-subject data that may exist outside the repository.
+
+Any future synthetic or public dataset added to `data/` should include its own provenance and licensing information.

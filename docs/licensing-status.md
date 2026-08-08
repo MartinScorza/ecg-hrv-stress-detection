@@ -12,6 +12,12 @@ Before making the code publicly reusable, confirm:
 2. any applicable Université de Technologie de Compiègne (UTC) rules for academic project code;
 3. that no proprietary laboratory code or third-party source is embedded in the files.
 
+## Unresolved project dependency
+
+`PARALLEL FINAL.vi` contains a reference to `Global 1.vi`, but that file is not present in the original archive. Its provenance and contents therefore cannot currently be audited.
+
+Until that dependency is recovered or shown to be an obsolete/non-required reference, it should be treated as another reason not to claim that the preserved LabVIEW workflow is a complete independently redistributable software package.
+
 ## National Instruments dependencies
 
 The LabVIEW VIs reference National Instruments software components. Those dependencies are not part of this repository and remain subject to their own licenses.

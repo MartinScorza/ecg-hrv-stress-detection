@@ -13,7 +13,11 @@ References support:
 - acquisition start/read/stop/clear sequence;
 - single-channel multi-sample acquisition;
 - spreadsheet-style export;
-- invocation of the processing subVI.
+- invocation of `Processing_data_subvi_V23.vi`.
+
+The main VI contains two internal references to `Processing_data_subvi_V23.vi`. The processing subVI does not reference the main VI. This supports retaining both files as distinct artifacts in the repository.
+
+Binary inspection also identified a reference to `Global 1.vi`. That file is absent from the original ZIP and is therefore an unresolved dependency. Its role and whether it is required by the final execution path must be confirmed in LabVIEW.
 
 ### `Processing_data_subvi_V23.vi`
 
@@ -27,7 +31,20 @@ References support:
 - autoregressive spectrum estimation;
 - delimited-spreadsheet reading.
 
+No additional custom external VI was identified from the printable dependency strings of this processing subVI.
+
 The presence of these references demonstrates that the functions are dependencies of the VIs. It does not, by itself, establish every runtime parameter or prove every code path was executed during the reported experiments.
+
+## Binary integrity
+
+The VIs committed to GitHub were compared with the original project ZIP and are byte-for-byte identical.
+
+Git blob identifiers:
+
+- `PARALLEL FINAL.vi`: `4adf9b39acf3373edde3e401173f4ff525684492`
+- `Processing_data_subvi_V23.vi`: `3cf479c0688823048d6bf254d51374685f198877`
+
+This confirms preservation integrity, not runtime reproducibility.
 
 ## Described in the report but not fully recoverable from the available source
 
@@ -46,6 +63,7 @@ These elements are documented as historical project methods/results but are not 
 
 ## Not available in the archive
 
+- `Global 1.vi`, referenced by the main VI;
 - raw ECG data;
 - original result spreadsheet;
 - R-peak exports;

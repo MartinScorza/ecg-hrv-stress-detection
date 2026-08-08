@@ -1,0 +1,3 @@
+# Python dependency explicitly documented in the original academic report.
+# The original environment and package version were not preserved.
+scikit-learn

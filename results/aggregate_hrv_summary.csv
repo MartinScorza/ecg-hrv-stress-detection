@@ -1,0 +1,3 @@
+condition,n,mean_rr_ms,rmssd_ms,prr50_pct,mean_hr_bpm,lf_hf
+stress,6,899.625000,50.753350,28.110900,67.087400,0.516541
+relaxation,6,944.126667,76.776583,40.219317,64.334590,0.511165

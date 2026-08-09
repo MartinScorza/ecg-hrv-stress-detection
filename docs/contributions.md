@@ -6,9 +6,11 @@ The original BM04 academic report credits the project to:
 - Martín Scorza
 - Pietro Marcon
 
-The report identifies the work as a group project but does not provide a task-by-task contribution breakdown.
+The project was completed with an **equal overall contribution across the three team members**.
 
-The repository therefore presents the work as a collaborative three-student project and does not assign exclusive ownership of the acquisition, LabVIEW processing, HRV analysis, experimental work, or exploratory classification to a single contributor.
+The report does not provide a task-by-task contribution breakdown. The repository therefore presents the work as a collaborative three-student project and does not assign exclusive ownership of the acquisition, LabVIEW processing, HRV analysis, experimental work, or exploratory classification to a single contributor.
+
+Publication of the jointly authored project material included in this portfolio repository is authorized by the team.
 
 ## Portfolio wording
 
@@ -16,7 +18,7 @@ A concise and defensible description is:
 
 > Contributed as one of three biomedical engineering students to an ECG acquisition and HRV analysis project, with responsibilities shared across the team for signal acquisition, LabVIEW processing, HRV analysis, experimental work, and exploratory classification.
 
-This wording reflects the documented team structure without implying sole authorship of any subsystem.
+This wording reflects the equal overall team contribution without implying sole authorship of any subsystem.
 
 ## License
 

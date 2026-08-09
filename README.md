@@ -184,7 +184,7 @@ The academic report credits:
 - Martin Scorza
 - Pietro Marcon
 
-The work was shared approximately equally across the three-person team. The repository therefore presents the project as collaborative work and does not imply sole authorship of any subsystem. See [`docs/contributions.md`](docs/contributions.md).
+The repository presents the work as a collaborative three-student project and does not assign exclusive ownership of the acquisition, LabVIEW processing, HRV analysis, experimental work, or exploratory classification to a single contributor. See [`docs/contributions.md`](docs/contributions.md).
 
 ## License
 

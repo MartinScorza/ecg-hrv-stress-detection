@@ -184,7 +184,7 @@ The academic report credits:
 - Martin Scorza
 - Pietro Marcon
 
-The original material does not provide a reliable task-by-task contribution breakdown, so the project is presented as collaborative work rather than attributing the complete system to one person.
+The work was shared approximately equally across the three-person team. The repository therefore presents the project as collaborative work and does not imply sole authorship of any subsystem. See [`docs/contributions.md`](docs/contributions.md).
 
 ## License
 

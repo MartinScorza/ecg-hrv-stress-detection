@@ -8,7 +8,7 @@ The original BM04 academic report credits the project to:
 
 The report identifies the work as a group project but does not provide a task-by-task contribution breakdown.
 
-According to the project team recollection used for this portfolio reconstruction, the workload was shared **approximately equally across the three members**. The repository therefore presents the work as a collaborative team project rather than attributing the full acquisition, LabVIEW processing, HRV analysis, or machine-learning workflow to a single contributor.
+The repository therefore presents the work as a collaborative three-student project and does not assign exclusive ownership of the acquisition, LabVIEW processing, HRV analysis, experimental work, or exploratory classification to a single contributor.
 
 ## Portfolio wording
 
@@ -16,7 +16,7 @@ A concise and defensible description is:
 
 > Contributed as one of three biomedical engineering students to an ECG acquisition and HRV analysis project, with responsibilities shared across the team for signal acquisition, LabVIEW processing, HRV analysis, experimental work, and exploratory classification.
 
-This reflects an equal team contribution without implying sole authorship of any subsystem.
+This wording reflects the documented team structure without implying sole authorship of any subsystem.
 
 ## License
 
